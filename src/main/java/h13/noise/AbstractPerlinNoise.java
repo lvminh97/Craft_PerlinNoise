@@ -114,7 +114,14 @@ public abstract class AbstractPerlinNoise implements PerlinNoise {
      */
     @StudentImplementationRequired
     protected Point2D[] createGradients(int width, int height) {
-        return crash(); // TODO: H1.1 - remove if implemented
+        // TODO: H1.1
+        Point2D[] map = new Point2D[width * height];
+        for(int y = 0; y < height; y++) {
+            for(int x = 0; x < width; x++) {
+                map[y * width + x] = createGradient();
+            }
+        }
+        return map;
     }
 
     /**
@@ -124,7 +131,11 @@ public abstract class AbstractPerlinNoise implements PerlinNoise {
      */
     @StudentImplementationRequired
     protected Point2D createGradient() {
-          return crash(); // TODO: H1.1 - remove if implemented
+        // TODO: H1.1
+        double x, y;
+        x = -1 + 2 * getRandomGenerator().nextDouble();
+        y = -1 + 2 * getRandomGenerator().nextDouble();
+        return new Point2D(x, y);
     }
 
     @Override
@@ -163,7 +174,8 @@ public abstract class AbstractPerlinNoise implements PerlinNoise {
     @Override
     @StudentImplementationRequired
     public Point2D getGradient(int x, int y) {
-        return crash(); // TODO: H1.1 - remove if implemented
+        // TODO: H1.1
+        return getGradients()[y * (getWidth() + 1) + x];
     }
 
     @Override
