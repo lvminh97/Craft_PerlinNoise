@@ -68,7 +68,29 @@ public class ChooserView extends AbstractView<ChooserView, GridPane> implements 
     @Override
     @StudentImplementationRequired
     public void initialize() {
-        crash(); // TODO: H4.1 - remove if implemented
+        // TODO: H4.1
+        nextColumn = 0;
+        nextRow = 0;
+        addListener(change -> {
+            if(change.wasAdded()) {
+                options.put(change.getKey(), change.getValueAdded());
+                nextColumn++;
+                if(nextColumn == getColumnSize()) {
+                    nextColumn = 0;
+                    nextRow++;
+                }
+            }
+            else if(change.wasRemoved()) {
+                options.remove(change.getKey());
+                if(nextColumn > 0)
+                    nextColumn--;
+                else {
+                    nextColumn = getColumnSize() - 1;
+                    if(nextRow > 0)
+                        nextRow--;
+                }
+            }
+        });
     }
 
     /**

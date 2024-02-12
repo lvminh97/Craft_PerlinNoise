@@ -46,6 +46,7 @@ public class DoubleField extends NumberField {
 
     @Override
     public StringConverter<Number> getConverter() {
-        return crash(); // TODO: H3.2 - remove if implemented
+        // TODO: H3.2
+        return new NumberStringConverter(n -> n + "", Double::parseDouble);
     }
 }

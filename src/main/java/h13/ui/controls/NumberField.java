@@ -1,5 +1,6 @@
 package h13.ui.controls;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.TextField;
@@ -53,7 +54,8 @@ public abstract class NumberField extends TextField {
      */
     @StudentImplementationRequired
     protected void initBindings() {
-        crash(); // TODO: H3.2 - remove if implemented
+        // TODO: H3.2
+        Bindings.bindBidirectional(this.textProperty(), valueProperty(), getConverter());
     }
 
     /**

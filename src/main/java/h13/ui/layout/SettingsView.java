@@ -1,5 +1,6 @@
 package h13.ui.layout;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -107,7 +108,22 @@ public class SettingsView extends AbstractView<SettingsView, VBox> implements Vi
     @Override
     @StudentImplementationRequired
     public void initialize() {
-        crash(); // TODO: H4.3 - remove if implemented
+        // TODO: H4.3
+        root.getChildren().add(algorithms.getKey());
+        HBox algorithmBox = new HBox();
+        algorithmBox.setSpacing(10);
+        for(Map.Entry<String, BooleanProperty> algo: algorithms.getValue().selectedProperties().entrySet()) {
+            algorithmBox.getChildren().add(algorithms.getValue().get(algo.getKey()));
+        }
+        root.getChildren().add(algorithmBox);
+        root.getChildren().add(parameters.getKey());
+        root.getChildren().add(parameters.getValue().getView());
+        HBox buttonBox = new HBox();
+        buttonBox.getChildren().add(getGenerate());
+        buttonBox.setSpacing(10);
+        buttonBox.getChildren().add(getSave());
+        root.getChildren().add(buttonBox);
+        viewModel.addVisibilityListener(visibilities);
     }
 
     /**

@@ -1,8 +1,11 @@
 package h13.ui.layout;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,6 +49,18 @@ public class SettingsViewModel {
      */
     @StudentImplementationRequired
     public void addVisibilityListener(Map<String, Set<String>> configurations) {
-        crash(); // TODO: H4.2 - remove if implemented
+        // TODO: H4.2
+        Map<String, BooleanBinding> bindingMap = new HashMap<>();
+        for(String parameter: parameters.keySet()) {
+            String algorithm = configurations.keySet().stream().filter(key -> configurations.get(key).contains(parameter)).findFirst().orElse("");
+            BooleanBinding binding = Bindings.createBooleanBinding(() -> {
+                return !algorithms.get(algorithm).getValue();
+            }, algorithms.get(algorithm));
+            bindingMap.put(parameter, binding);
+        }
+
+        for(String parameter: parameters.keySet()) {
+            parameters.get(parameter).bind(bindingMap.get(parameter));
+        }
     }
 }

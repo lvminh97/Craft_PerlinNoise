@@ -29,6 +29,7 @@ public class LongField extends IntegerField {
 
     @Override
     public StringConverter<Number> getConverter() {
-        return crash(); // TODO: H3.2 - remove if implemented
+        // TODO: H3.2
+        return new NumberStringConverter(n -> n + "", Long::parseLong);
     }
 }
