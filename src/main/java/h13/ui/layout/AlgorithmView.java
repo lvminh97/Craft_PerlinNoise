@@ -2,6 +2,7 @@ package h13.ui.layout;
 
 import h13.noise.PerlinNoise;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.BorderPane;
@@ -70,14 +71,31 @@ public class AlgorithmView extends AbstractView<AlgorithmView, BorderPane> imple
      * and the 'save' button which saves the canvas as an image.
      */
     protected void initializeButtons() {
-        crash(); // TODO: H5.2 - remove if implemented
+        // TODO: H5.2
+        getSettings().getGenerate().setOnMouseClicked(mouseEvent -> {
+            PerlinNoise algorithm = viewModel.getAlgorithm();
+            viewModel.draw(algorithm, visualization.getGraphicsContext2D(), 0, 0, (int) visualization.getWidth(), (int) visualization.getHeight());
+        });
+        getSettings().getSave().setOnMouseClicked(mouseEvent -> {
+            viewModel.save((int) visualization.getWidth(), (int) visualization.getHeight());
+        });
     }
 
     /**
      * Initializes the size of the canvas and binds it to the size of the root layout.
      */
     protected void initializeSize() {
-        crash(); // TODO: H5.2 - remove if implemented
+        // TODO: H5.2
+        DoubleProperty bottomPadding, topPadding;
+        settings.getView().widthProperty().addListener((observableValue, number, t1) -> {
+            visualization.setWidth(root.getWidth() - settings.getView().getWidth());
+        });
+        root.widthProperty().addListener((observableValue, number, t1) -> {
+            visualization.setWidth(root.getWidth() - settings.getView().getWidth());
+        });
+        root.heightProperty().addListener((observableValue, number, t1) -> {
+            visualization.setHeight(root.getHeight() - root.getPadding().getTop() - root.getPadding().getBottom());
+        });
     }
 
     /**
