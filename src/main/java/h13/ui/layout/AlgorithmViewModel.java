@@ -103,8 +103,10 @@ public abstract class AlgorithmViewModel {
         // TODO: H5.1
         if(algorithm == null)
             return;
+        
+        lastAlgorithm = PerlinNoise.normalized(algorithm);
 
-        context.drawImage(createImage(PerlinNoise.normalized(algorithm), x, y, w, h), x, y);
+        context.drawImage(createImage(getLastAlgorithm(), x, y, w, h), x, y);
     }
 
     /**
