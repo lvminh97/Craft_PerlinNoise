@@ -104,7 +104,7 @@ public abstract class AlgorithmViewModel {
         if(algorithm == null)
             return;
 
-        context.drawImage(createImage(algorithm, x, y, w, h), x, y);
+        context.drawImage(createImage(PerlinNoise.normalized(algorithm), x, y, w, h), x, y);
     }
 
     /**

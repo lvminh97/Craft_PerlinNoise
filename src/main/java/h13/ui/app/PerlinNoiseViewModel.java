@@ -2,6 +2,7 @@ package h13.ui.app;
 
 
 import h13.noise.FractalPerlinNoise;
+import h13.noise.ImprovedPerlinNoise;
 import h13.noise.PerlinNoise;
 import h13.noise.SimplePerlinNoise;
 import h13.ui.layout.AlgorithmView;
@@ -11,6 +12,7 @@ import h13.util.LRUCache;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -103,7 +105,37 @@ public class PerlinNoiseViewModel extends AlgorithmViewModel {
 
     @Override
     protected @Nullable PerlinNoise getAlgorithm() {
-        return crash(); // TODO: H6 - remove if implemented
+        // TODO: H6
+        if(cacheSimpleNoise.get(getParameter(Parameter.SEED).getValue().longValue()) == null) {
+            cacheSimpleNoise.put(getParameter(Parameter.SEED).getValue().longValue(),
+                new SimplePerlinNoise((int) Screen.getPrimary().getVisualBounds().getWidth(),
+                    (int) Screen.getPrimary().getVisualBounds().getHeight(),
+                    getParameter(Parameter.FREQUENCY).getValue().doubleValue(), new Random(getParameter(Parameter.SEED).getValue().longValue())));
+        }
+        PerlinNoise newAlgorithm = cacheSimpleNoise.get(getParameter(Parameter.SEED).getValue().longValue());
+
+        if(getAlgorithm(Algorithm.IMPROVED).get()) {
+            if(cacheImprovedNoise.get(newAlgorithm) == null) {
+                cacheImprovedNoise.put(newAlgorithm, new ImprovedPerlinNoise(newAlgorithm, getPermutationTable(newAlgorithm.getRandomGenerator())));
+            }
+            newAlgorithm = cacheImprovedNoise.get(newAlgorithm);
+        }
+
+        if(getAlgorithm(Algorithm.FRACTAL).get()) {
+            newAlgorithm = new FractalPerlinNoise(newAlgorithm,
+                getParameter(Parameter.AMPLITUDE).getValue().doubleValue(),
+                getParameter(Parameter.OCTAVES).getValue().intValue(),
+                getParameter(Parameter.LACUNARITY).getValue().doubleValue(),
+                getParameter(Parameter.PERSISTENCE).getValue().doubleValue());
+        }
+
+        if(newAlgorithm.equals(lastAlgorithm) && getParameter(Parameter.FREQUENCY).getValue().doubleValue() == lastAlgorithm.getFrequency()) {
+            return null;
+        }
+        else {
+            lastAlgorithm = newAlgorithm;
+            return newAlgorithm;
+        }
     }
 
     /**
