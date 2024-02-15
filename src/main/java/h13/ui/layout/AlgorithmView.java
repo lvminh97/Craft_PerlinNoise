@@ -74,7 +74,10 @@ public class AlgorithmView extends AbstractView<AlgorithmView, BorderPane> imple
         // TODO: H5.2
         getSettings().getGenerate().setOnMouseClicked(mouseEvent -> {
             PerlinNoise algorithm = viewModel.getAlgorithm();
-            viewModel.draw(algorithm, visualization.getGraphicsContext2D(), 0, 0, (int) visualization.getWidth(), (int) visualization.getHeight());
+            if(algorithm != null) {
+                viewModel.lastAlgorithm = PerlinNoise.normalized(algorithm);
+            }
+            viewModel.draw(viewModel.getLastAlgorithm(), visualization.getGraphicsContext2D(), 0, 0, (int) visualization.getWidth(), (int) visualization.getHeight());
         });
         getSettings().getSave().setOnMouseClicked(mouseEvent -> {
             viewModel.save((int) visualization.getWidth(), (int) visualization.getHeight());
@@ -95,6 +98,12 @@ public class AlgorithmView extends AbstractView<AlgorithmView, BorderPane> imple
         });
         root.heightProperty().addListener((observableValue, number, t1) -> {
             visualization.setHeight(root.getHeight() - root.getPadding().getTop() - root.getPadding().getBottom());
+        });
+        visualization.widthProperty().addListener((observableValue, number, t1) -> {
+            viewModel.draw(viewModel.getLastAlgorithm(), visualization.getGraphicsContext2D(), 0, 0, (int) visualization.getWidth(), (int) visualization.getHeight());
+        });
+        visualization.heightProperty().addListener((observableValue, number, t1) ->  {
+            viewModel.draw(viewModel.getLastAlgorithm(), visualization.getGraphicsContext2D(), 0, 0, (int) visualization.getWidth(), (int) visualization.getHeight());
         });
     }
 
